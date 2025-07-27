@@ -54,6 +54,29 @@
             }
         }
         
+        /* 复制成功提示动画 */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
         /* 滚动条美化 */
         .modal-body::-webkit-scrollbar {
             width: 8px;
@@ -373,10 +396,10 @@
                     <a href="https://v.douyin.com/_rSL0zBfxbw/ 9@5.com :8pm" target="_blank" class="social-link" title="抖音主页" style="display: inline-block; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; text-decoration: none;">
                         <img src="./images/抖音 (1).svg" alt="抖音" style="width: 20px; height: 20px;">
                     </a>
-                    <a href="#" class="social-link" title="联系邮箱：nufewyh2023@163.com" style="display: inline-block; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; text-decoration: none;">
+                    <a href="#" class="social-link" id="emailBtn" title="联系邮箱：nufewyh2023@163.com" style="display: inline-block; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; text-decoration: none;">
                         <img src="./images/邮箱.svg" alt="邮箱" style="width: 20px; height: 20px;">
                     </a>
-                    <a href="#" class="social-link" title="微信号：Gatsby933" style="display: inline-block; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; text-decoration: none;">
+                    <a href="#" class="social-link" id="wechatBtn" title="微信号：Gatsby933" style="display: inline-block; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; text-decoration: none;">
                         <img src="./images/微信 (1).svg" alt="微信" style="width: 20px; height: 20px;">
                     </a>
                 </div>
@@ -432,7 +455,7 @@
                         </div>
                         <div class="mt-2">
                             <button id="showAllUpdates" class="btn w-100" style="background: rgba(255, 255, 255, 0.2); color: white; border: none; padding: 6px 12px; font-size: 0.8rem; border-radius: 8px; transition: all 0.3s ease;">
-                                查看更多更新日志...
+                                查看更多...
                             </button>
                         </div>
                     </div>
@@ -460,6 +483,8 @@
         </div>
     </div>
 
+
+
     <!-- 底部版权 -->
     <footer class="footer-fixed" style="text-align: center; color: white; font-size: 0.9rem; position: fixed; bottom: 0; left: 0; right: 0; padding: 10px 0;">
         <div style="display: inline-block; background: linear-gradient(135deg, rgba(128, 128, 128, 0.8), rgba(64, 64, 64, 0.8)); padding: 8px 20px; border-radius: 20px; backdrop-filter: blur(5px);">
@@ -478,37 +503,87 @@
             document.getElementById('time').textContent = now.toLocaleTimeString('zh-CN', timeOptions);
         }
 
-        // 动态天气（高德地图API）
+        // 动态天气（高德地图API + 备用方案）
         async function updateWeather() {
             const key = '7e4f726be1be9def9aae111e9bb2aa72'; // 服务端API Key
             let city = '北京'; // 默认城市
             
             try {
-                // 首先通过IP获取用户位置
-                const ipRes = await fetch(`https://restapi.amap.com/v3/ip?key=${key}`);
-                const ipData = await ipRes.json();
-                console.log('IP定位结果:', ipData); // 调试信息
-                
-                if (ipData.status === '1' && ipData.city && ipData.city !== '[]') {
-                    city = ipData.city.replace(/市/g, ''); // 去掉"市"字
+                // 首先尝试通过IP获取用户位置
+                try {
+                    const ipRes = await fetch(`https://restapi.amap.com/v3/ip?key=${key}`, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        timeout: 5000 // 5秒超时
+                    });
+                    
+                    if (ipRes.ok) {
+                        const ipData = await ipRes.json();
+                        console.log('IP定位结果:', ipData);
+                        
+                        if (ipData.status === '1' && ipData.city && ipData.city !== '[]') {
+                            city = ipData.city.replace(/市/g, ''); // 去掉"市"字
+                        }
+                    }
+                } catch (ipError) {
+                    console.log('IP定位失败，使用默认城市:', ipError);
                 }
                 
                 // 使用高德地图天气API获取实时天气
-                const weatherRes = await fetch(`https://restapi.amap.com/v3/weather/weatherInfo?key=${key}&city=${city}&extensions=base`);
-                const weatherData = await weatherRes.json();
-                console.log('天气查询结果:', weatherData); // 调试信息
+                const weatherRes = await fetch(`https://restapi.amap.com/v3/weather/weatherInfo?key=${key}&city=${city}&extensions=base`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                    timeout: 5000 // 5秒超时
+                });
                 
-                if (weatherData.status === '1' && weatherData.lives && weatherData.lives.length > 0) {
-                    const weather = weatherData.lives[0];
-                    const weatherText = weather.weather;
-                    const temperature = weather.temperature;
-                    document.getElementById('weather').textContent = `${city} ${weatherText} ${temperature}°C`;
-                } else {
-                    throw new Error('天气数据获取失败');
+                if (weatherRes.ok) {
+                    const weatherData = await weatherRes.json();
+                    console.log('天气查询结果:', weatherData);
+                    
+                    if (weatherData.status === '1' && weatherData.lives && weatherData.lives.length > 0) {
+                        const weather = weatherData.lives[0];
+                        const weatherText = weather.weather;
+                        const temperature = weather.temperature;
+                        document.getElementById('weather').textContent = `${city} ${weatherText} ${temperature}°C`;
+                        return; // 成功获取，直接返回
+                    }
                 }
+                
+                // 如果高德API失败，尝试备用天气API
+                throw new Error('高德天气API失败，尝试备用方案');
+                
             } catch (error) {
-                console.error('获取天气信息失败:', error);
-                document.getElementById('weather').textContent = '无法获取天气信息';
+                console.error('高德天气API失败:', error);
+                
+                // 备用方案：使用wttr.in API
+                try {
+                    const fallbackRes = await fetch(`https://wttr.in/${city}?format=j1`, {
+                        method: 'GET',
+                        timeout: 5000
+                    });
+                    
+                    if (fallbackRes.ok) {
+                        const fallbackData = await fallbackRes.json();
+                        console.log('备用天气API结果:', fallbackData);
+                        
+                        if (fallbackData.current_condition && fallbackData.current_condition.length > 0) {
+                            const current = fallbackData.current_condition[0];
+                            const weatherText = current.lang_zh ? current.lang_zh[0].value : current.weatherDesc[0].value;
+                            const temperature = current.temp_C;
+                            document.getElementById('weather').textContent = `${city} ${weatherText} ${temperature}°C`;
+                            return;
+                        }
+                    }
+                } catch (fallbackError) {
+                    console.error('备用天气API也失败:', fallbackError);
+                }
+                
+                // 所有方案都失败，显示默认信息
+                document.getElementById('weather').textContent = `${city} 天气信息暂时无法获取`;
             }
         }
 
@@ -606,7 +681,102 @@
                 const modal = new bootstrap.Modal(modalElement);
                 modal.show();
             });
+            
+            // 邮箱按钮点击事件
+            document.getElementById('emailBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                copyToClipboard('nufewyh2023@163.com');
+                showContactInfo('邮箱：nufewyh2023@163.com');
+            });
+            
+            // 微信按钮点击事件
+            document.getElementById('wechatBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                copyToClipboard('Gatsby933');
+                showContactInfo('微信：Gatsby933');
+            });
         });
+        
+        // 复制到剪贴板功能
+        function copyToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                // 使用现代 Clipboard API
+                navigator.clipboard.writeText(text).then(function() {
+                    showCopySuccess();
+                }).catch(function(err) {
+                    console.error('复制失败:', err);
+                    fallbackCopyTextToClipboard(text);
+                });
+            } else {
+                // 降级方案
+                fallbackCopyTextToClipboard(text);
+            }
+        }
+        
+        // 降级复制方案
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopySuccess();
+                } else {
+                    alert('复制失败，请手动复制：' + text);
+                }
+            } catch (err) {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制：' + text);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        
+        // 显示复制成功提示
+        function showCopySuccess() {
+            // 创建临时提示元素
+            const toast = document.createElement('div');
+            toast.style.cssText = 'position: fixed; top: 20px; right: 20px; background: rgba(76, 175, 80, 0.9); color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 9999;';
+            toast.textContent = '复制成功！';
+            document.body.appendChild(toast);
+            
+            // 3秒后自动移除
+            setTimeout(() => {
+                if (document.body.contains(toast)) {
+                    document.body.removeChild(toast);
+                }
+            }, 2000);
+        }
+        
+        // 显示联系信息
+        function showContactInfo(text) {
+            // 创建联系信息提示元素
+            const contactToast = document.createElement('div');
+            contactToast.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(50, 50, 50, 0.95); color: white; padding: 15px 25px; border-radius: 10px; font-size: 16px; z-index: 9999; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); font-family: "Microsoft YaHei", sans-serif;';
+            contactToast.textContent = text;
+            document.body.appendChild(contactToast);
+            
+            // 2秒后自动移除
+            setTimeout(() => {
+                if (document.body.contains(contactToast)) {
+                    contactToast.style.opacity = '0';
+                    contactToast.style.transform = 'translateX(-50%) translateY(-20px)';
+                    contactToast.style.transition = 'all 0.3s ease';
+                    setTimeout(() => {
+                        if (document.body.contains(contactToast)) {
+                            document.body.removeChild(contactToast);
+                        }
+                    }, 300);
+                }
+            }, 2000);
+        }
     </script>
 </body>
 
