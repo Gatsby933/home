@@ -507,28 +507,64 @@
         async function updateWeather() {
             const key = '7e4f726be1be9def9aae111e9bb2aa72'; // 服务端API Key
             let city = '北京'; // 默认城市
+            let latitude, longitude;
             
             try {
-                // 首先尝试通过IP获取用户位置
-                try {
-                    const ipRes = await fetch(`https://restapi.amap.com/v3/ip?key=${key}`, {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json',
-                        },
-                        timeout: 5000 // 5秒超时
-                    });
-                    
-                    if (ipRes.ok) {
-                        const ipData = await ipRes.json();
-                        console.log('IP定位结果:', ipData);
+                // 首先尝试获取GPS位置（移动端优先）
+                if (navigator.geolocation) {
+                    try {
+                        const position = await getCurrentPosition();
+                        latitude = position.coords.latitude;
+                        longitude = position.coords.longitude;
+                        console.log('GPS位置获取成功:', { latitude, longitude });
                         
-                        if (ipData.status === '1' && ipData.city && ipData.city !== '[]') {
-                            city = ipData.city.replace(/市/g, ''); // 去掉"市"字
+                        // 使用GPS坐标通过高德地图API获取城市信息
+                        const locationRes = await fetch(`https://restapi.amap.com/v3/geocode/regeo?key=${key}&location=${longitude},${latitude}&output=json`, {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'application/json',
+                            },
+                            timeout: 5000
+                        });
+                        
+                        if (locationRes.ok) {
+                            const locationData = await locationRes.json();
+                            console.log('GPS定位结果:', locationData);
+                            
+                            if (locationData.status === '1' && locationData.regeocode && locationData.regeocode.addressComponent) {
+                                const addressComponent = locationData.regeocode.addressComponent;
+                                city = addressComponent.city || addressComponent.district || addressComponent.province;
+                                city = city.replace(/市|区|省/g, ''); // 去掉行政区划后缀
+                                console.log('GPS定位城市:', city);
+                            }
                         }
+                    } catch (gpsError) {
+                        console.log('GPS定位失败，尝试IP定位:', gpsError);
                     }
-                } catch (ipError) {
-                    console.log('IP定位失败，使用默认城市:', ipError);
+                }
+                
+                // 如果GPS定位失败，尝试通过IP获取用户位置
+                if (!city || city === '北京') {
+                    try {
+                        const ipRes = await fetch(`https://restapi.amap.com/v3/ip?key=${key}`, {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'application/json',
+                            },
+                            timeout: 5000 // 5秒超时
+                        });
+                        
+                        if (ipRes.ok) {
+                            const ipData = await ipRes.json();
+                            console.log('IP定位结果:', ipData);
+                            
+                            if (ipData.status === '1' && ipData.city && ipData.city !== '[]') {
+                                city = ipData.city.replace(/市/g, ''); // 去掉"市"字
+                            }
+                        }
+                    } catch (ipError) {
+                        console.log('IP定位失败，使用默认城市:', ipError);
+                    }
                 }
                 
                 // 使用高德地图天气API获取实时天气
@@ -668,7 +704,10 @@
             
             // 初始化其他功能
             updateTime();
-            updateWeather();
+            
+            // 检查位置权限并获取天气
+            checkLocationPermission();
+            
             renderUpdateLog();
             
             // 更新日志模态框功能
@@ -753,6 +792,127 @@
                     document.body.removeChild(toast);
                 }
             }, 2000);
+        }
+        
+        // 检查位置权限并获取天气
+        async function checkLocationPermission() {
+            // 检查是否支持地理定位
+            if (!navigator.geolocation) {
+                console.log('浏览器不支持地理定位，使用IP定位');
+                updateWeather();
+                return;
+            }
+            
+            // 检查权限状态（如果支持）
+            if (navigator.permissions && navigator.permissions.query) {
+                try {
+                    const permission = await navigator.permissions.query({ name: 'geolocation' });
+                    
+                    if (permission.state === 'granted') {
+                        // 已授权，直接获取位置
+                        console.log('位置权限已授权');
+                        updateWeather();
+                    } else if (permission.state === 'prompt') {
+                        // 需要请求权限
+                        console.log('需要请求位置权限');
+                        showLocationPermissionPrompt();
+                    } else if (permission.state === 'denied') {
+                        // 权限被拒绝
+                        console.log('位置权限被拒绝，使用IP定位');
+                        updateWeather();
+                    }
+                } catch (error) {
+                    console.log('权限检查失败，尝试直接获取位置:', error);
+                    updateWeather();
+                }
+            } else {
+                // 不支持权限API，直接尝试获取位置
+                console.log('不支持权限API，直接尝试获取位置');
+                updateWeather();
+            }
+        }
+        
+        // 显示位置权限请求提示
+        function showLocationPermissionPrompt() {
+            const promptDiv = document.createElement('div');
+            promptDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(50, 50, 50, 0.95);
+                color: white;
+                padding: 25px;
+                border-radius: 15px;
+                font-size: 16px;
+                z-index: 10000;
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                font-family: "Microsoft YaHei", sans-serif;
+                text-align: center;
+                max-width: 300px;
+            `;
+            promptDiv.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px;">获取位置信息</h4>
+                    <p style="margin-bottom: 20px; line-height: 1.5;">为了为您提供准确的天气信息，需要获取您的位置权限。</p>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button id="allowLocation" style="background: rgba(76, 175, 80, 0.8); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px;">允许</button>
+                    <button id="denyLocation" style="background: rgba(158, 158, 158, 0.8); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px;">拒绝</button>
+                </div>
+            `;
+            document.body.appendChild(promptDiv);
+            
+            // 绑定按钮事件
+            document.getElementById('allowLocation').addEventListener('click', function() {
+                document.body.removeChild(promptDiv);
+                updateWeather();
+            });
+            
+            document.getElementById('denyLocation').addEventListener('click', function() {
+                document.body.removeChild(promptDiv);
+                updateWeather();
+            });
+        }
+        
+        // GPS定位Promise包装
+        function getCurrentPosition() {
+            return new Promise((resolve, reject) => {
+                if (!navigator.geolocation) {
+                    reject(new Error('浏览器不支持地理定位'));
+                    return;
+                }
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        resolve(position);
+                    },
+                    (error) => {
+                        let errorMessage = '获取位置失败';
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage = '用户拒绝了位置请求';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage = '位置信息不可用';
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage = '获取位置超时';
+                                break;
+                            default:
+                                errorMessage = '未知错误';
+                                break;
+                        }
+                        reject(new Error(errorMessage));
+                    },
+                    {
+                        enableHighAccuracy: true, // 高精度
+                        timeout: 10000, // 10秒超时
+                        maximumAge: 60000 // 缓存1分钟
+                    }
+                );
+            });
         }
         
         // 显示联系信息
