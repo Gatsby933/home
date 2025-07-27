@@ -17,11 +17,41 @@
     <style>
         .social-link:hover {
             background: rgba(255, 255, 255, 0.3) !important;
-            transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .card {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 优化动画性能 */
+        .social-link, .btn, .card {
+            will-change: transform;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+            transition: all 0.2s ease;
+        }
+        
+        /* 减少重绘和回流 */
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* 优化滚动性能 */
+        .modal-body {
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* 移动端滚动优化 */
+        @media (max-width: 767.98px) {
+            html, body {
+                scroll-behavior: smooth;
+            }
+            
+            .container {
+                overflow-y: auto;
+            }
         }
         
         /* 滚动条美化 */
@@ -49,15 +79,279 @@
             scrollbar-width: thin;
             scrollbar-color: rgba(128, 128, 128, 0.8) rgba(255, 255, 255, 0.1);
         }
+
+        /* 移动端优化 */
+        @media (max-width: 767.98px) {
+            body {
+                overflow-x: hidden !important;
+                background-attachment: scroll !important;
+                min-height: 100vh !important;
+            }
+            
+            main.container {
+                min-height: auto !important;
+                padding: 20px 15px 100px 15px !important;
+                transform: none !important;
+                display: flex !important;
+                align-items: flex-start !important;
+                justify-content: center !important;
+            }
+            
+            .row.w-100.text-center {
+                flex-direction: column !important;
+                transform: none !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                gap: 20px !important;
+            }
+            
+            .col-md-4, .col-md-5 {
+                max-width: 100% !important;
+                flex: 0 0 100% !important;
+                margin: 0 !important;
+                padding: 0 10px !important;
+            }
+            
+            .col-md-4 {
+                margin-bottom: 0 !important;
+                order: 1 !important;
+            }
+            
+            .col-md-5 {
+                order: 2 !important;
+            }
+            
+            /* 头像和姓名区域 */
+            .col-md-4 img.rounded-circle {
+                width: 100px !important;
+                height: 100px !important;
+                margin-bottom: 15px !important;
+            }
+            
+            .col-md-4 h5 {
+                font-size: 1.5rem !important;
+                margin-bottom: 15px !important;
+            }
+            
+            /* 卡片样式 */
+            .card.w-75, .card.w-100 {
+                width: 100% !important;
+                min-width: 0 !important;
+                margin-bottom: 15px !important;
+            }
+            
+            .card-body {
+                padding: 15px !important;
+            }
+            
+            /* 天气时间模块 */
+            .col-md-5 .card.w-75 {
+                transform: none !important;
+                margin-bottom: 20px !important;
+            }
+            
+            .col-md-5 .card-body {
+                min-height: 100px !important;
+            }
+            
+            #date {
+                font-size: 1.2rem !important;
+                margin-bottom: 8px !important;
+            }
+            
+            #time {
+                font-size: 2rem !important;
+                margin-bottom: 8px !important;
+            }
+            
+            #weather {
+                font-size: 1rem !important;
+            }
+            
+            /* 按钮区域 */
+            .row.w-85 {
+                width: 100% !important;
+                margin: 0 !important;
+            }
+            
+            .col-4 {
+                padding: 0 5px !important;
+            }
+            
+            .btn {
+                height: 50px !important;
+                font-size: 14px !important;
+                border-radius: 8px !important;
+            }
+            
+            .btn img {
+                width: 18px !important;
+                height: 18px !important;
+                margin-right: 8px !important;
+            }
+            
+            /* 社交媒体链接 */
+            .d-flex.justify-content-center.align-items-center.mt-3 {
+                flex-wrap: wrap !important;
+                gap: 12px !important;
+                margin-top: 15px !important;
+            }
+            
+            .social-link {
+                width: 35px !important;
+                height: 35px !important;
+            }
+            
+            .social-link img {
+                width: 18px !important;
+                height: 18px !important;
+            }
+            
+            /* 更新日志 */
+            .update-log .update-item {
+                padding: 8px 0 !important;
+            }
+            
+            .update-title {
+                font-size: 0.75rem !important;
+            }
+            
+            .update-time {
+                font-size: 0.65rem !important;
+            }
+            
+            /* 底部版权 */
+            .footer-fixed {
+                position: relative !important;
+                padding: 20px 0 10px 0 !important;
+                margin-top: 20px !important;
+                bottom: auto !important;
+            }
+            
+            .footer-fixed > div {
+                font-size: 0.8rem !important;
+                padding: 6px 15px !important;
+            }
+        }
+        
+        /* 超小屏幕优化 */
+        @media (max-width: 480px) {
+            main.container {
+                padding: 15px 10px !important;
+            }
+            
+            .col-md-4, .col-md-5 {
+                padding: 0 5px !important;
+            }
+            
+            .col-md-4 img.rounded-circle {
+                width: 90px !important;
+                height: 90px !important;
+            }
+            
+            .col-md-4 h5 {
+                font-size: 1.3rem !important;
+            }
+            
+            .card-body {
+                padding: 12px !important;
+            }
+            
+            #date {
+                font-size: 1.1rem !important;
+            }
+            
+            #time {
+                font-size: 1.8rem !important;
+            }
+            
+            .btn {
+                height: 45px !important;
+                font-size: 13px !important;
+            }
+            
+            .btn img {
+                width: 16px !important;
+                height: 16px !important;
+                margin-right: 6px !important;
+            }
+            
+            .social-link {
+                width: 32px !important;
+                height: 32px !important;
+            }
+            
+            .social-link img {
+                width: 16px !important;
+                height: 16px !important;
+            }
+        }
+        
+        /* 背景图片响应式优化 */
+        @media (max-width: 767.98px) {
+            body {
+                background-attachment: scroll !important;
+                background-size: cover !important;
+                background-position: center center !important;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            body {
+                background-attachment: fixed !important;
+                background-size: cover !important;
+                background-position: center center !important;
+            }
+        }
+        
+        /* 移动端特殊优化 */
+        @media (max-width: 767.98px) {
+            /* 确保内容不会溢出 */
+            .container {
+                max-width: 100% !important;
+                overflow-x: hidden !important;
+            }
+            
+            /* 优化卡片阴影和边框 */
+            .card {
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+                border-radius: 12px !important;
+            }
+            
+            /* 优化按钮悬停效果 */
+            .btn:hover {
+                transform: scale(1.02) !important;
+            }
+            
+            /* 优化社交媒体链接悬停效果 */
+            .social-link:hover {
+                transform: scale(1.03) !important;
+            }
+            
+            /* 移动端性能优化 */
+            .social-link, .btn, .card {
+                will-change: auto !important;
+                transform: none !important;
+            }
+            
+            .social-link:hover, .btn:hover {
+                transform: scale(1.02) !important;
+            }
+            
+            /* 确保模态框在移动端正常显示 */
+            .modal-dialog {
+                margin: 10px !important;
+            }
+        }
     </style>
 </head>
 
-<body style="background-image: url('./images/home.jpg'); background-size: cover; background-position: center; overflow-x: hidden;">
+<body style="background-image: url('./images/home.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; overflow-x: hidden;">
     <!-- 主体内容 -->
     <main class="container d-flex align-items-center justify-content-center" style="min-height: 85vh; padding: 20px 0; transform: translate(10px, 20px);">
         <div class="row w-100 text-center" style="transform: translateX(12%); max-width: 1000px;">
             <!-- 左侧个人信息 -->
-            <div class="col-md-4 d-flex flex-column align-items-center" style="margin-top: 60px;">
+            <div class="col-md-4 d-flex flex-column align-items-center" style="margin-top: 60px;" id="profile-section">
                 <img src="https://cloud-image-host.oss-cn-beijing.aliyuncs.com/wo.jpg" alt="头像"
                     class="rounded-circle shadow mb-3" style="width: 120px; height: 120px; border: 3px solid white;">
                 <h5 class="mb-3" style="font-size: 1.8rem; font-weight: bold; font-family: 'Microsoft YaHei', sans-serif; color: white;">@王映寒</h5>
@@ -92,7 +386,7 @@
             <div class="col-md-5 d-flex flex-column align-items-center" style="margin-left: 50px;">
                 <!-- 天气时间模块 -->
                 <div class="card w-75 mb-3"
-                    style="background: rgba(50, 50, 50, 0.8); font-size: 1.2rem; backdrop-filter: blur(10px); color: white; font-family: 'Microsoft YaHei', sans-serif; transform: translate(10px, -10px);">
+                    style="background: rgba(50, 50, 50, 0.8); font-size: 1.2rem; backdrop-filter: blur(10px); color: white; font-family: 'Microsoft YaHei', sans-serif; transform: translate(5px, -10px);">
                     <div class="card-body text-center d-flex flex-column justify-content-center align-items-center" style="min-height: 120px;">
                         <p id="date" style="font-size: 1.5rem; margin-bottom: 10px; text-align: center; width: 100%;">2025年7月27日</p>
                         <p id="time" style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px; text-align: center; width: 100%;">加载中...</p>
@@ -132,94 +426,46 @@
                     <div class="card-body" style="padding: 12px;">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h6 class="card-title mb-0" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">更新日志</h6>
-                            <button id="showAllUpdates" class="btn btn-sm" style="background: rgba(255, 255, 255, 0.2); color: white; border: none; padding: 2px 8px; font-size: 0.7rem; border-radius: 10px; transition: all 0.3s ease;">
-                                ...
-                            </button>
                         </div>
-                        <div class="update-log">
-                            <div class="update-item mb-1" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 4px;">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <span class="update-title" style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.7);">添加高德地图天气API</span>
-                                    <span class="update-time" style="font-size: 0.7rem; color: rgba(255, 255, 255, 0.5);">2025-01-27</span>
-                                </div>
-                            </div>
-                            <div class="update-item">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <span class="update-title" style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.7);">优化移动端适配</span>
-                                    <span class="update-time" style="font-size: 0.7rem; color: rgba(255, 255, 255, 0.5);">2025-01-27</span>
-                                </div>
-                            </div>
+                        <div class="update-log" id="update-log-short">
+                            <!-- 动态插入简要日志 -->
+                        </div>
+                        <div class="mt-2">
+                            <button id="showAllUpdates" class="btn w-100" style="background: rgba(255, 255, 255, 0.2); color: white; border: none; padding: 6px 12px; font-size: 0.8rem; border-radius: 8px; transition: all 0.3s ease;">
+                                查看更多更新日志...
+                            </button>
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
     </main>
 
-    <!-- 底部版权 -->
-    <footer style="text-align: center; color: white; font-size: 0.9rem; position: fixed; bottom: 0; left: 0; right: 0; padding: 10px 0;">
-        <div style="display: inline-block; background: linear-gradient(135deg, rgba(128, 128, 128, 0.8), rgba(64, 64, 64, 0.8)); padding: 8px 20px; border-radius: 20px; backdrop-filter: blur(5px);">
-            &copy; 2025 版权所有. @王映寒
-        </div>
-    </footer>
-
     <!-- 更新日志模态框 -->
-    <div id="updateModal" class="modal fade" tabindex="-1" style="display: none;">
+    <div id="updateModal" class="modal fade" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
             <div class="modal-content" style="background: rgba(50, 50, 50, 0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-family: 'Microsoft YaHei', sans-serif;">
                 <div class="modal-header" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2);">
-                    <h5 class="modal-title" style="font-size: 1.2rem; font-weight: bold;">更新日志</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title" id="updateModalLabel" style="font-size: 1.2rem; font-weight: bold;">更新日志</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
-                    <div class="update-log-full">
-                        <div class="update-item-full mb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 12px;">
-                            <div class="d-flex justify-content-between align-items-start mb-1">
-                                <span class="update-title-full" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">添加高德地图天气API</span>
-                                <span class="update-time-full" style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">2025-01-27</span>
-                            </div>
-                            <p class="update-desc" style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin: 0;">集成高德地图天气API，实现实时天气显示功能</p>
-                        </div>
-                        <div class="update-item-full mb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 12px;">
-                            <div class="d-flex justify-content-between align-items-start mb-1">
-                                <span class="update-title-full" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">优化移动端适配</span>
-                                <span class="update-time-full" style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">2025-01-27</span>
-                            </div>
-                            <p class="update-desc" style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin: 0;">重新设计移动端布局，实现响应式设计</p>
-                        </div>
-                        <div class="update-item-full mb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 12px;">
-                            <div class="d-flex justify-content-between align-items-start mb-1">
-                                <span class="update-title-full" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">添加社交媒体链接</span>
-                                <span class="update-time-full" style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">2025-01-27</span>
-                            </div>
-                            <p class="update-desc" style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin: 0;">集成GitHub、微博、抖音等社交媒体链接</p>
-                        </div>
-                        <div class="update-item-full mb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 12px;">
-                            <div class="d-flex justify-content-between align-items-start mb-1">
-                                <span class="update-title-full" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">完成个人主页设计</span>
-                                <span class="update-time-full" style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">2025-01-27</span>
-                            </div>
-                            <p class="update-desc" style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin: 0;">完成个人主页的整体设计和功能实现</p>
-                        </div>
-                        <div class="update-item-full mb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 12px;">
-                            <div class="d-flex justify-content-between align-items-start mb-1">
-                                <span class="update-title-full" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">添加更新日志功能</span>
-                                <span class="update-time-full" style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">2025-01-27</span>
-                            </div>
-                            <p class="update-desc" style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin: 0;">新增更新日志展示功能，支持展开查看详细内容</p>
-                        </div>
-                        <div class="update-item-full">
-                            <div class="d-flex justify-content-between align-items-start mb-1">
-                                <span class="update-title-full" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">优化用户体验</span>
-                                <span class="update-time-full" style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">2025-01-27</span>
-                            </div>
-                            <p class="update-desc" style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin: 0;">持续优化界面设计和交互体验</p>
-                        </div>
+                    <div class="update-log-full" id="update-log-full">
+                        <!-- 动态插入完整日志 -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- 底部版权 -->
+    <footer class="footer-fixed" style="text-align: center; color: white; font-size: 0.9rem; position: fixed; bottom: 0; left: 0; right: 0; padding: 10px 0;">
+        <div style="display: inline-block; background: linear-gradient(135deg, rgba(128, 128, 128, 0.8), rgba(64, 64, 64, 0.8)); padding: 8px 20px; border-radius: 20px; backdrop-filter: blur(5px);">
+            &copy; 2025 版权所有. @王映寒
+        </div>
+    </footer>
 
     <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -266,14 +512,100 @@
             }
         }
 
-        setInterval(updateTime, 1000);
-        updateTime();
-        updateWeather();
-        
-        // 更新日志模态框功能
-        document.getElementById('showAllUpdates').addEventListener('click', function() {
-            const modal = new bootstrap.Modal(document.getElementById('updateModal'));
-            modal.show();
+        // 更新日志动态渲染
+        function renderUpdateLog() {
+            fetch('./update-log.json')
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return res.json();
+                })
+                .then(list => {
+                    // 使用 DocumentFragment 优化DOM操作
+                    const shortFragment = document.createDocumentFragment();
+                    const fullFragment = document.createDocumentFragment();
+                    
+                    // 简要日志（只显示前2条）
+                    list.slice(0,2).forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'update-item mb-1';
+                        div.style.cssText = 'border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px;';
+                        div.innerHTML = `
+                            <div class="d-flex justify-content-between align-items-start">
+                                <span class="update-title" style="font-size: 0.8rem; color: rgba(255,255,255,0.7);">${item.title}</span>
+                                <span class="update-time" style="font-size: 0.7rem; color: rgba(255,255,255,0.5);">${item.date}</span>
+                            </div>
+                        `;
+                        shortFragment.appendChild(div);
+                    });
+                    
+                    // 完整日志
+                    list.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'update-item-full mb-3';
+                        div.style.cssText = 'border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 12px;';
+                        div.innerHTML = `
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <span class="update-title-full" style="font-size: 1rem; font-weight: bold; color: rgba(255,255,255,0.9);">${item.title}</span>
+                                <span class="update-time-full" style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">${item.date}</span>
+                            </div>
+                            <p class="update-desc" style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin: 0;">${item.desc}</p>
+                        `;
+                        fullFragment.appendChild(div);
+                    });
+                    
+                    // 一次性更新DOM
+                    const shortContainer = document.getElementById('update-log-short');
+                    const fullContainer = document.getElementById('update-log-full');
+                    
+                    shortContainer.innerHTML = '';
+                    fullContainer.innerHTML = '';
+                    
+                    shortContainer.appendChild(shortFragment);
+                    fullContainer.appendChild(fullFragment);
+                })
+                .catch(error => {
+                    console.error('加载更新日志失败:', error);
+                    document.getElementById('update-log-short').innerHTML = '<div style="color: rgba(255,255,255,0.6); font-size: 0.8rem;">无法加载更新日志</div>';
+                    document.getElementById('update-log-full').innerHTML = '<div style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">无法加载更新日志</div>';
+                });
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 使用 requestAnimationFrame 优化时间更新
+            function updateTimeWithRAF() {
+                updateTime();
+                requestAnimationFrame(updateTimeWithRAF);
+            }
+            
+            // 启动时间更新（每秒更新一次）
+            let lastUpdate = 0;
+            function animateTime(currentTime) {
+                if (currentTime - lastUpdate >= 1000) {
+                    updateTime();
+                    lastUpdate = currentTime;
+                }
+                requestAnimationFrame(animateTime);
+            }
+            requestAnimationFrame(animateTime);
+            
+            // 初始化其他功能
+            updateTime();
+            updateWeather();
+            renderUpdateLog();
+            
+            // 更新日志模态框功能
+            document.getElementById('showAllUpdates').addEventListener('click', function() {
+                // 预加载模态框内容，避免打开时卡顿
+                const modalElement = document.getElementById('updateModal');
+                if (!modalElement.classList.contains('modal-loaded')) {
+                    modalElement.classList.add('modal-loaded');
+                }
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
+            });
         });
     </script>
 </body>
