@@ -1,0 +1,32 @@
+/* 样式文件 */
+
+body {
+    font-family: 'HarmonyOS Sans', Arial, sans-serif;
+    color: #fff;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    width: 70%; /* 调整卡片宽度 */
+}
+
+.btn {
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn span {
+    margin-top: 5px; /* 调整按钮文字位置 */
+}
+
+.btn:hover {
+    transform: scale(1.05);
+}
+
+#weather {
+    margin-top: 15px; /* 调整天气文字位置 */
+}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <!-- 基础信息 -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="主页">
+    <meta name="keywords" content="导航,主页">
+    <meta name="author" content="涵の宇宙">
+    <title>导航页</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="https://cloud-image-host.oss-cn-beijing.aliyuncs.com/mangguo.png">
+    <style>
+        .social-link:hover {
+            background: rgba(255, 255, 255, 0.3) !important;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body style="background-image: url('./images/home.jpg'); background-size: cover; background-position: center; overflow-x: hidden;">
+    <!-- 主体内容 -->
+    <main class="container d-flex align-items-center justify-content-center vh-100">
+        <div class="row w-100 text-center" style="transform: translateX(10%);">
+            <!-- 左侧个人信息 -->
+            <div class="col-md-4 d-flex flex-column align-items-center">
+                <img src="https://cloud-image-host.oss-cn-beijing.aliyuncs.com/wo.jpg" alt="头像"
+                    class="rounded-circle shadow mb-3" style="width: 120px; height: 120px; border: 3px solid white;">
+                <h5 class="mb-3" style="font-size: 1.8rem; font-weight: bold; font-family: 'Microsoft YaHei', sans-serif; color: white;">@王映寒</h5>
+                <div class="card w-75"
+                    style="background: rgba(50, 50, 50, 0.8); font-size: 1.2rem; backdrop-filter: blur(10px); color: white; font-family: 'Microsoft YaHei', sans-serif;">
+                    <div class="card-body text-center">
+                        <p class="card-text">技术，思想，表达。</p>
+                    </div>
+                </div>
+                
+                <!-- 外部链接图标 -->
+                <div class="mt-3 d-flex justify-content-center align-items-center" style="gap: 15px;">
+                    <a href="https://github.com/Gatsby933" target="_blank" class="social-link" title="GitHub主页" style="display: inline-block; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; text-decoration: none;">
+                        <img src="./images/github.svg" alt="GitHub" style="width: 20px; height: 20px;">
+                    </a>
+                    <a href="https://weibo.com/u/7798052809" target="_blank" class="social-link" title="微博主页" style="display: inline-block; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; text-decoration: none;">
+                        <img src="./images/新浪微博.svg" alt="微博" style="width: 20px; height: 20px;">
+                    </a>
+                    <a href="https://v.douyin.com/_rSL0zBfxbw/ 9@5.com :8pm" target="_blank" class="social-link" title="抖音主页" style="display: inline-block; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; text-decoration: none;">
+                        <img src="./images/抖音 (1).svg" alt="抖音" style="width: 20px; height: 20px;">
+                    </a>
+                    <a href="#" class="social-link" title="联系邮箱：nufewyh2023@163.com" style="display: inline-block; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; text-decoration: none;">
+                        <img src="./images/邮箱.svg" alt="邮箱" style="width: 20px; height: 20px;">
+                    </a>
+                    <a href="#" class="social-link" title="微信号：Gatsby933" style="display: inline-block; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; text-decoration: none;">
+                        <img src="./images/微信 (1).svg" alt="微信" style="width: 20px; height: 20px;">
+                    </a>
+                </div>
+            </div>
+
+            <!-- 右侧模块 -->
+            <div class="col-md-5 d-flex flex-column align-items-center">
+                <!-- 天气时间模块 -->
+                <div class="card w-75 mb-3"
+                    style="background: rgba(50, 50, 50, 0.8); font-size: 1.2rem; backdrop-filter: blur(10px); color: white; font-family: 'Microsoft YaHei', sans-serif; transform: translate(10px, -10px);">
+                    <div class="card-body text-center d-flex flex-column justify-content-center align-items-center" style="min-height: 120px;">
+                        <p id="date" style="font-size: 1.5rem; margin-bottom: 10px; text-align: center; width: 100%;">2025年7月27日</p>
+                        <p id="time" style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px; text-align: center; width: 100%;">加载中...</p>
+                        <div class="d-flex align-items-center justify-content-center" style="width: 100%;">
+                            <p id="weather" style="font-size: 1.2rem; margin-bottom: 0; text-align: center;">北京 天气：晴 25°C</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- 按钮 -->
+                <div class="row w-100">
+                    <div class="col-4 mb-3">
+                        <a href="#" class="btn w-100 shadow d-flex align-items-center justify-content-center"
+                            style="background: rgba(50, 50, 50, 0.8); height: 60px; font-size: 16px; color: white; font-family: 'Microsoft YaHei', sans-serif;">
+                            <img src="./images/博客园.svg" alt="博客图标" style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>博客</span>
+                        </a>
+                    </div>
+                    <div class="col-4 mb-3">
+                        <a href="#" class="btn w-100 shadow d-flex align-items-center justify-content-center"
+                            style="background: rgba(50, 50, 50, 0.8); height: 60px; font-size: 16px; color: white; font-family: 'Microsoft YaHei', sans-serif;">
+                            <img src="./images/音乐.svg" alt="音乐图标" style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>音乐</span>
+                        </a>
+                    </div>
+                    <div class="col-4 mb-3">
+                        <a href="#" class="btn w-100 shadow d-flex align-items-center justify-content-center"
+                            style="background: rgba(50, 50, 50, 0.8); height: 60px; font-size: 16px; color: white; font-family: 'Microsoft YaHei', sans-serif;">
+                            <img src="./images/搜索 (1).svg" alt="搜索图标" style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>搜索</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部版权 -->
+    <footer style="text-align: center; color: white; font-size: 0.9rem; margin-top: 20px;">
+        &copy; 2025 版权所有. @王映寒
+    </footer>
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('date').textContent = now.toLocaleDateString('zh-CN', dateOptions);
+            document.getElementById('time').textContent = now.toLocaleTimeString('zh-CN', timeOptions);
+        }
+
+        // 动态天气（高德地图API）
+        async function updateWeather() {
+            const key = '7e4f726be1be9def9aae111e9bb2aa72'; // 服务端API Key
+            let city = '北京'; // 默认城市
+            
+            try {
+                // 首先通过IP获取用户位置
+                const ipRes = await fetch(`https://restapi.amap.com/v3/ip?key=${key}`);
+                const ipData = await ipRes.json();
+                console.log('IP定位结果:', ipData); // 调试信息
+                
+                if (ipData.status === '1' && ipData.city && ipData.city !== '[]') {
+                    city = ipData.city.replace(/市/g, ''); // 去掉"市"字
+                }
+                
+                // 使用高德地图天气API获取实时天气
+                const weatherRes = await fetch(`https://restapi.amap.com/v3/weather/weatherInfo?key=${key}&city=${city}&extensions=base`);
+                const weatherData = await weatherRes.json();
+                console.log('天气查询结果:', weatherData); // 调试信息
+                
+                if (weatherData.status === '1' && weatherData.lives && weatherData.lives.length > 0) {
+                    const weather = weatherData.lives[0];
+                    const weatherText = weather.weather;
+                    const temperature = weather.temperature;
+                    document.getElementById('weather').textContent = `${city} ${weatherText} ${temperature}°C`;
+                } else {
+                    throw new Error('天气数据获取失败');
+                }
+            } catch (error) {
+                console.error('获取天气信息失败:', error);
+                document.getElementById('weather').textContent = '无法获取天气信息';
+            }
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+        updateWeather();
+    </script>
+</body>
+
+</html>
