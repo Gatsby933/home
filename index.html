@@ -20,15 +20,44 @@
             transform: scale(1.1);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 滚动条美化 */
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .modal-body::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+        .modal-body::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, rgba(128, 128, 128, 0.8), rgba(64, 64, 64, 0.8));
+            border-radius: 4px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, rgba(160, 160, 160, 0.9), rgba(80, 80, 80, 0.9));
+        }
+        
+        /* Firefox滚动条 */
+        .modal-body {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(128, 128, 128, 0.8) rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 
 <body style="background-image: url('./images/home.jpg'); background-size: cover; background-position: center; overflow-x: hidden;">
     <!-- 主体内容 -->
-    <main class="container d-flex align-items-center justify-content-center vh-100">
-        <div class="row w-100 text-center" style="transform: translateX(10%);">
+    <main class="container d-flex align-items-center justify-content-center" style="min-height: 85vh; padding: 20px 0; transform: translate(10px, 20px);">
+        <div class="row w-100 text-center" style="transform: translateX(12%); max-width: 1000px;">
             <!-- 左侧个人信息 -->
-            <div class="col-md-4 d-flex flex-column align-items-center">
+            <div class="col-md-4 d-flex flex-column align-items-center" style="margin-top: 60px;">
                 <img src="https://cloud-image-host.oss-cn-beijing.aliyuncs.com/wo.jpg" alt="头像"
                     class="rounded-circle shadow mb-3" style="width: 120px; height: 120px; border: 3px solid white;">
                 <h5 class="mb-3" style="font-size: 1.8rem; font-weight: bold; font-family: 'Microsoft YaHei', sans-serif; color: white;">@王映寒</h5>
@@ -60,7 +89,7 @@
             </div>
 
             <!-- 右侧模块 -->
-            <div class="col-md-5 d-flex flex-column align-items-center">
+            <div class="col-md-5 d-flex flex-column align-items-center" style="margin-left: 50px;">
                 <!-- 天气时间模块 -->
                 <div class="card w-75 mb-3"
                     style="background: rgba(50, 50, 50, 0.8); font-size: 1.2rem; backdrop-filter: blur(10px); color: white; font-family: 'Microsoft YaHei', sans-serif; transform: translate(10px, -10px);">
@@ -73,7 +102,7 @@
                     </div>
                 </div>
                 <!-- 按钮 -->
-                <div class="row w-100">
+                <div class="row w-85">
                     <div class="col-4 mb-3">
                         <a href="#" class="btn w-100 shadow d-flex align-items-center justify-content-center"
                             style="background: rgba(50, 50, 50, 0.8); height: 60px; font-size: 16px; color: white; font-family: 'Microsoft YaHei', sans-serif;">
@@ -96,14 +125,101 @@
                         </a>
                     </div>
                 </div>
+                
+                <!-- 更新日志 -->
+                <div class="card w-100 mt-3"
+                    style="background: rgba(50, 50, 50, 0.8); backdrop-filter: blur(10px); color: white; font-family: 'Microsoft YaHei', sans-serif;">
+                    <div class="card-body" style="padding: 12px;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="card-title mb-0" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">更新日志</h6>
+                            <button id="showAllUpdates" class="btn btn-sm" style="background: rgba(255, 255, 255, 0.2); color: white; border: none; padding: 2px 8px; font-size: 0.7rem; border-radius: 10px; transition: all 0.3s ease;">
+                                ...
+                            </button>
+                        </div>
+                        <div class="update-log">
+                            <div class="update-item mb-1" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 4px;">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <span class="update-title" style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.7);">添加高德地图天气API</span>
+                                    <span class="update-time" style="font-size: 0.7rem; color: rgba(255, 255, 255, 0.5);">2025-01-27</span>
+                                </div>
+                            </div>
+                            <div class="update-item">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <span class="update-title" style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.7);">优化移动端适配</span>
+                                    <span class="update-time" style="font-size: 0.7rem; color: rgba(255, 255, 255, 0.5);">2025-01-27</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
     <!-- 底部版权 -->
-    <footer style="text-align: center; color: white; font-size: 0.9rem; margin-top: 20px;">
-        &copy; 2025 版权所有. @王映寒
+    <footer style="text-align: center; color: white; font-size: 0.9rem; position: fixed; bottom: 0; left: 0; right: 0; padding: 10px 0;">
+        <div style="display: inline-block; background: linear-gradient(135deg, rgba(128, 128, 128, 0.8), rgba(64, 64, 64, 0.8)); padding: 8px 20px; border-radius: 20px; backdrop-filter: blur(5px);">
+            &copy; 2025 版权所有. @王映寒
+        </div>
     </footer>
+
+    <!-- 更新日志模态框 -->
+    <div id="updateModal" class="modal fade" tabindex="-1" style="display: none;">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
+            <div class="modal-content" style="background: rgba(50, 50, 50, 0.95); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-family: 'Microsoft YaHei', sans-serif;">
+                <div class="modal-header" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2);">
+                    <h5 class="modal-title" style="font-size: 1.2rem; font-weight: bold;">更新日志</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                    <div class="update-log-full">
+                        <div class="update-item-full mb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 12px;">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <span class="update-title-full" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">添加高德地图天气API</span>
+                                <span class="update-time-full" style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">2025-01-27</span>
+                            </div>
+                            <p class="update-desc" style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin: 0;">集成高德地图天气API，实现实时天气显示功能</p>
+                        </div>
+                        <div class="update-item-full mb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 12px;">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <span class="update-title-full" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">优化移动端适配</span>
+                                <span class="update-time-full" style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">2025-01-27</span>
+                            </div>
+                            <p class="update-desc" style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin: 0;">重新设计移动端布局，实现响应式设计</p>
+                        </div>
+                        <div class="update-item-full mb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 12px;">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <span class="update-title-full" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">添加社交媒体链接</span>
+                                <span class="update-time-full" style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">2025-01-27</span>
+                            </div>
+                            <p class="update-desc" style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin: 0;">集成GitHub、微博、抖音等社交媒体链接</p>
+                        </div>
+                        <div class="update-item-full mb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 12px;">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <span class="update-title-full" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">完成个人主页设计</span>
+                                <span class="update-time-full" style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">2025-01-27</span>
+                            </div>
+                            <p class="update-desc" style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin: 0;">完成个人主页的整体设计和功能实现</p>
+                        </div>
+                        <div class="update-item-full mb-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.2); padding-bottom: 12px;">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <span class="update-title-full" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">添加更新日志功能</span>
+                                <span class="update-time-full" style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">2025-01-27</span>
+                            </div>
+                            <p class="update-desc" style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin: 0;">新增更新日志展示功能，支持展开查看详细内容</p>
+                        </div>
+                        <div class="update-item-full">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <span class="update-title-full" style="font-size: 1rem; font-weight: bold; color: rgba(255, 255, 255, 0.9);">优化用户体验</span>
+                                <span class="update-time-full" style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6);">2025-01-27</span>
+                            </div>
+                            <p class="update-desc" style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin: 0;">持续优化界面设计和交互体验</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -153,6 +269,12 @@
         setInterval(updateTime, 1000);
         updateTime();
         updateWeather();
+        
+        // 更新日志模态框功能
+        document.getElementById('showAllUpdates').addEventListener('click', function() {
+            const modal = new bootstrap.Modal(document.getElementById('updateModal'));
+            modal.show();
+        });
     </script>
 </body>
 
